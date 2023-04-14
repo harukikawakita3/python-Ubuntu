@@ -98,3 +98,4 @@ if __name__ == '__main__':
     init_game()
     root.after(TIMER_WAIT, main_proc, root, canvas)
     root.mainloop()
+    
