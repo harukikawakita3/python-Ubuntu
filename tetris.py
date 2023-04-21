@@ -47,10 +47,15 @@ def draw_game(canvas):
     if g_pat:
         for i in range(4 * 4):
             if g_pat[i // 4][i % 4]:
-                draw_one_block(canvas, i % 4 + g_pos['x'], i // 4 + g_pos['y'])
+                draw_one_block(canvas, i % 4 + g_pos['x'], i // 4 + g)
     if g_scene == 1:
-        canvas.create_rectangle(40, SCN_H // 2 - 50, SCN_W - 40, SCN_H // 2 + 50, fill='gray', tag='objects')
-        canvas.create_text(SCN_W // 2, SCN_H // 2, text='Game Over\n\nPlease Space Key', font=('Monospace', 14, 'bold'), justify='center', fill='white', anchor='center', tag='objects')
+        if not g_draw:
+            pygame.draw.rect(screen, (0,0,0), (0,0,360,640))
+        draw_title("TETRIS", 48, WIDTH/2, HEIGHT/3)
+        draw_title("PRESS SPACE TO PLAY", 22, WIDTH/2, HEIGHT/2)
+        draw_title("© 2022 YOUR NAME", 12, WIDTH/2, HEIGHT/1.5)
+        draw_title("HIGHSCORE", 18, WIDTH/2, HEIGHT/1.2)
+        pygame.display.update()
 
 def main_proc(root, canvas):
     global g_buf, g_pat, g_time, g_scene
