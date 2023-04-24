@@ -23,7 +23,8 @@ def create_pattern():
     pats = [['0100', '0100', '0100', '0100'], ['0000', '0100', '0110', '0100'],
             ['0000', '0110', '0100', '0100'], ['0000', '0110', '0010', '0010'],
             ['0000', '0010', '0110', '0100'], ['0000', '0100', '0110', '0010']]
-    return [p := pats[randint(0, 5)], [p := np.rot90(np.array(list(map(lambda x: [int(v) for v in x], p)), int)).tolist() for _ in range(randint(1, 4))][-1]][1]
+    p = pats[randint(0, 5)]
+    return [p, [np.rot90(np.array(list(map(lambda x: [int(v) for v in x], p)), int)).tolist() for _ in range(randint(1, 4))][-1]][1]
 
 def is_crashed(pat, x, y):
     for i in range(16):
@@ -60,11 +61,14 @@ def draw_game(canvas):
 def main_proc(root, canvas):
     global g_buf, g_pat, g_time, g_scene
 
-    if (e := g_events.get() if not g_events.empty() else None) is not None:
+    e = g_events.get() if not g_events.empty() else None
+    if e is not None:
         if g_scene == 0 and g_pat is not None:
             if e == 'Left':     g_pos['x'] += -1 if not is_crashed(g_pat, g_pos['x'] - 1, g_pos['y']) else 0
             elif e == 'Right':  g_pos['x'] += 1 if not is_crashed(g_pat, g_pos['x'] + 1, g_pos['y']) else 0
-            elif e == 'space':  g_pat = pat if not is_crashed(pat := np.rot90(np.array(g_pat, int)).tolist(), **g_pos) else g_pat
+            if e == 'space':
+                p = np.rot90(np.array(g_pat, int)).tolist()
+                g_pat = p if not is_crashed(p, **g_pos) else g_pat
         elif g_scene == 1 and e == 'space':
             init_game()
 
